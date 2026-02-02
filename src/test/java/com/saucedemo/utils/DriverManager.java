@@ -3,6 +3,7 @@ package com.saucedemo.utils;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class DriverManager {
     // ThreadLocal isolates the WebDriver instance for each thread
@@ -11,9 +12,15 @@ public class DriverManager {
     public static WebDriver getDriver() {
         if (driver.get() == null) {
             WebDriverManager.chromedriver().setup();
-            // Create a NEW browser instance for this specific thread
-            driver.set(new ChromeDriver());
-            driver.get().manage().window().maximize();
+
+            // Setup "Ghost Mode" options
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless=new"); // Run without a window
+            options.addArguments("--window-size=1920,1080"); // "See" the whole page
+            options.addArguments("--disable-search-engine-choice-screen"); // Block that annoying popup
+
+            // Pass the options into the driver
+            driver.set(new ChromeDriver(options));
         }
         return driver.get();
     }
