@@ -20,18 +20,18 @@ jobs:
         run: mvn clean test
 
       - name: Send Email Notification on Failure
-        if: failure()
+        if: always() # Change 'failure()' to 'always()'
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.office365.com
-          server_port: 587
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: "❌ Test Failure: ${{ github.repository }} - ${{ github.workflow }}"
-          to: brian.padgett11@outlook.com
-          from: GitHub Actions Automation
-          body: |
-              The Cucumber test suite failed on the latest push.
-              
+            server_address: smtp.sendgrid.net
+            server_port: 587 # The modern standard
+            secure: false # This tells the action to use STARTTLS on port 587
+            username: apikey # Must stay as "apikey"
+            password: ${{ secrets.EMAIL_PASSWORD }} # Your SendGrid SG.xxx Key
+            subject: "❌ Test Failure: ${{ github.repository }}"
+            to: brian.padgett11@outlook.com
+            from: brian.padgett11@outlook.com
+            body: |
+              The Cucumber test suite failed.
               Commit: ${{ github.sha }}
               View logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
