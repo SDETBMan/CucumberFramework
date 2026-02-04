@@ -28,9 +28,11 @@ public class ProductsPage extends BasePage {
         String addId = "add-to-cart-" + productName.toLowerCase().replace(" ", "-");
         String removeId = "remove-" + productName.toLowerCase().replace(" ", "-");
 
-        click(By.id(addId));
+        // CHANGE: Using javascriptClick method
+        // This bypasses the UI lag and forces the event to fire
+        javascriptClick(By.id(addId));
 
-        // We can still access 'wait' directly for complex logic!
+        // We can still access 'wait' directly for complex logic
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(removeId)));
     }
 
