@@ -20,7 +20,7 @@ jobs:
         run: mvn clean test
 
       - name: Send Email Notification on Failure
-        if: always()
+        if: failure()
         uses: dawidd6/action-send-mail@v3
         with:
             server_address: smtp.gmail.com

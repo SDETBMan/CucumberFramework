@@ -3,34 +3,42 @@ package com.saucedemo.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class LoginPage {
-    private WebDriver driver;
+public class LoginPage extends BasePage {
 
-    // Locators
     private By usernameField = By.id("user-name");
     private By passwordField = By.id("password");
     private By loginButton = By.id("login-button");
-    private By errorMessage = By.cssSelector("[data-test='error']");
+    private By errorMessage = By.cssSelector("[data-test='error']"); // Locator for the error
 
-    // Constructor
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    // Actions
+    // --- Granular Methods for Cucumber Steps ---
+
     public void enterUsername(String username) {
-        driver.findElement(usernameField).sendKeys(username);
+        // Uses BasePage's 'sendKeys' (clears + waits + types)
+        sendKeys(usernameField, username);
     }
 
     public void enterPassword(String password) {
-        driver.findElement(passwordField).sendKeys(password);
+        sendKeys(passwordField, password);
     }
 
     public void clickLogin() {
-        driver.findElement(loginButton).click();
+        // Uses BasePage's 'click' (waits for clickable + clicks)
+        click(loginButton);
     }
 
     public boolean isErrorDisplayed() {
+        // We can still access 'driver' directly because it's protected in BasePage
         return driver.findElement(errorMessage).isDisplayed();
+    }
+
+    // Optional: Keep this helper if you ever want to do it all in one line
+    public void login(String username, String password) {
+        enterUsername(username);
+        enterPassword(password);
+        clickLogin();
     }
 }
