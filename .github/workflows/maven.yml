@@ -23,19 +23,19 @@ jobs:
         if: always()
         uses: dawidd6/action-send-mail@v3
         with:
-            server_address: smtp.sendgrid.net
-            server_port: 587
-            secure: false
+            server_address: smtp.gmail.com
+            server_port: 465
+            secure: true
 
-            username: apikey
+            username: ${{ secrets.EMAIL_USERNAME }}
             password: ${{ secrets.EMAIL_PASSWORD }}
 
             subject: "❌ Test Notification: ${{ github.repository }}"
-            to: bpadgett813@gmail.com
-            from: brian.padgett11@outlook.com
+            to: brian.padgett11@outlook.com
+            from: ${{ secrets.EMAIL_USERNAME }}
 
             body: |
-              The Cucumber test suite execution is complete.
+              Build Status: ${{ job.status }}
             
               Commit: ${{ github.sha }}
               View logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
