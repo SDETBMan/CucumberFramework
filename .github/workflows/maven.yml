@@ -18,3 +18,20 @@ jobs:
 
       - name: Run Tests
         run: mvn clean test
+
+      - name: Send Email Notification on Failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.office365.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "❌ Test Failure: ${{ github.repository }} - ${{ github.workflow }}"
+          to: brian.padgett11@outlook.com
+          from: GitHub Actions Automation
+          body: |
+              The Cucumber test suite failed on the latest push.
+              
+              Commit: ${{ github.sha }}
+              View logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
