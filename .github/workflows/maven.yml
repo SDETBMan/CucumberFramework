@@ -26,11 +26,14 @@ jobs:
             server_address: smtp.sendgrid.net
             server_port: 587
             secure: false
+
             username: apikey
             password: ${{ secrets.EMAIL_PASSWORD }}
+
             subject: "❌ Test Notification: ${{ github.repository }}"
             to: brian.padgett11@outlook.com
             from: brian.padgett11@outlook.com
+
             body: |
               The Cucumber test suite execution is complete.
             
