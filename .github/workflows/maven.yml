@@ -16,8 +16,8 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Run Tests
-        run: mvn clean test
+      - name: Run Cucumber Tests on BrowserStack
+        run: mvn clean test -Dtarget=browserstack -DbsUser=${{ secrets.BS_USER }} -DbsKey=${{ secrets.BS_KEY }}
 
       - name: Send Email Notification on Failure
         if: failure()
