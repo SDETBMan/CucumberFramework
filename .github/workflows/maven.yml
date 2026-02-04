@@ -35,4 +35,4 @@ jobs:
               The Cucumber test suite execution is complete.
             
               Commit: ${{ github.sha }}
-              View logs: https://github.com/${{ github.repository/actions/runs/${{ github.run_id }}
+              View logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
