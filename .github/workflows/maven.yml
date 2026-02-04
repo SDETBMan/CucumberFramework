@@ -31,7 +31,7 @@ jobs:
             password: ${{ secrets.EMAIL_PASSWORD }}
 
             subject: "❌ Test Notification: ${{ github.repository }}"
-            to: brian.padgett11@outlook.com
+            to: bpadgett813@gmail.com
             from: brian.padgett11@outlook.com
 
             body: |
