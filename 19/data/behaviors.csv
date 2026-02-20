@@ -1,7 +1,0 @@
-"BROKEN","EPIC","FAILED","FEATURE","PASSED","SKIPPED","STORY","UNKNOWN"
-"0","","0","Login Functionality","4","0","Login with multiple user types","0"
-"0","","0","Login Functionality","1","0","Failed login with invalid credentials","0"
-"0","","0","Shopping Cart Functionality","1","0","Add a backpack to the cart","0"
-"0","","0","Login Functionality","1","0","Successful login with valid credentials","0"
-"0","","0","API Health and Data Integrity","1","0","Validate user API returns 200 and correct data","0"
-"0","","0","API Health and Data Integrity","1","0","Validate users list endpoint returns multiple records","0"
