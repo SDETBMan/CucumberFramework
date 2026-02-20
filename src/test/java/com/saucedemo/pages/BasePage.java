@@ -21,6 +21,11 @@ public class BasePage {
     public BasePage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try {
+            driver.manage().window().maximize();
+        } catch (Exception ignored) {
+            // Mobile and headless drivers may not support maximize
+        }
     }
 
     // --- WRAPPER METHODS (The "Secret Sauce") ---

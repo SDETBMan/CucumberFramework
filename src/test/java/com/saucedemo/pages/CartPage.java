@@ -3,18 +3,30 @@ package com.saucedemo.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class CartPage {
-    private WebDriver driver;
+public class CartPage extends BasePage {
 
-    // Locator for the item name in the cart list
-    private By cartItemName = By.className("inventory_item_name");
+    private final By cartItemName   = By.className("inventory_item_name");
+    private final By checkoutButton = By.id("checkout");
 
     public CartPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    // specific check: does the text match what we expect?
     public String getFirstItemName() {
         return driver.findElement(cartItemName).getText();
+    }
+
+    public boolean isItemInCart(String productName) {
+        String xpath = String.format(
+                "//div[@class='inventory_item_name' and contains(normalize-space(text()),'%s')]", productName);
+        try {
+            return driver.findElement(By.xpath(xpath)).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void clickCheckout() {
+        click(checkoutButton);
     }
 }

@@ -41,4 +41,12 @@ public class LoginPage extends BasePage {
         enterPassword(password);
         clickLogin();
     }
+
+    public boolean isLoginButtonDisplayed() {
+        try {
+            return driver.findElement(loginButton).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
