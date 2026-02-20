@@ -14,15 +14,23 @@ on:
         type: choice
         options:
           - local
+          - grid
           - browserstack
+          - android
+          - ios
       test_browser:
-        description: 'Browser'
+        description: 'Browser (local/grid only)'
         required: true
         default: 'chrome'
         type: choice
         options:
           - chrome
           - firefox
+          - edge
+      run_performance:
+        description: 'Run JMeter Performance Tests?'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -32,8 +40,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BS_USER: ${{ secrets.BS_USER }}
-      BS_KEY: ${{ secrets.BS_KEY }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     steps:
       - name: Checkout Code
@@ -46,15 +53,47 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      # ── Web Tests: Headless Chrome (auto-runs on push/PR) ──────────
       - name: Run Cucumber Tests (Headless - CI)
         if: github.event_name != 'workflow_dispatch' || inputs.execution_mode == 'local'
         run: mvn clean test -Dheadless=true -Dbrowser=${{ github.event.inputs.test_browser || 'chrome' }}
 
+      # ── Web Tests: Selenium Grid ───────────────────────────────────
+      - name: Start Selenium Grid
+        if: github.event_name == 'workflow_dispatch' && inputs.execution_mode == 'grid'
+        run: docker compose up -d selenium-hub chrome firefox edge
+
+      - name: Run Cucumber Tests (Grid)
+        if: github.event_name == 'workflow_dispatch' && inputs.execution_mode == 'grid'
+        run: |
+          mvn clean test \
+            -Dtarget=grid \
+            -Dbrowser=${{ inputs.test_browser }} \
+            -Dgrid_url=http://localhost:4444/wd/hub \
+            -Dheadless=true
+
+      # ── Cloud: BrowserStack ────────────────────────────────────────
       - name: Run Cucumber Tests (BrowserStack)
         if: github.event_name == 'workflow_dispatch' && inputs.execution_mode == 'browserstack'
-        run: mvn clean test -Dtarget=browserstack -DbsUser=${{ secrets.BS_USER }} -DbsKey=${{ secrets.BS_KEY }}
+        run: mvn clean test -Dtarget=browserstack -Dbs_user=${{ secrets.BS_USER }} -Dbs_key=${{ secrets.BS_KEY }}
 
-      - name: Upload Test Report
+      # ── Mobile: Android ────────────────────────────────────────────
+      - name: Run Cucumber Tests (Android)
+        if: github.event_name == 'workflow_dispatch' && inputs.execution_mode == 'android'
+        run: mvn clean test -Dtarget=android
+
+      # ── Mobile: iOS ────────────────────────────────────────────────
+      - name: Run Cucumber Tests (iOS)
+        if: github.event_name == 'workflow_dispatch' && inputs.execution_mode == 'ios'
+        run: mvn clean test -Dtarget=ios
+
+      # ── Performance (optional) ─────────────────────────────────────
+      - name: Run JMeter Performance Tests
+        if: github.event_name == 'workflow_dispatch' && inputs.run_performance == true
+        run: mvn jmeter:jmeter
+
+      # ── Artifacts & Reporting ──────────────────────────────────────
+      - name: Upload Allure Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -79,20 +118,21 @@ jobs:
           publish_branch: gh-pages
           publish_dir: allure-history
 
+      # ── Notifications ──────────────────────────────────────────────
       - name: Send Email Notification on Failure
         if: failure()
         uses: dawidd6/action-send-mail@v3
         with:
-            server_address: smtp.gmail.com
-            server_port: 465
-            secure: true
-            username: ${{ secrets.EMAIL_USERNAME }}
-            password: ${{ secrets.EMAIL_PASSWORD }}
-            subject: "Test Notification Failure: ${{ github.repository }}"
-            to: brian.padgett11@outlook.com
-            from: ${{ secrets.EMAIL_USERNAME }}
-            body: |
-              Build Status: ${{ job.status }}
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Test Notification Failure: ${{ github.repository }}"
+          to: brian.padgett11@outlook.com
+          from: ${{ secrets.EMAIL_USERNAME }}
+          body: |
+            Build Status: ${{ job.status }}
 
-              Commit: ${{ github.sha }}
-              View logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Commit: ${{ github.sha }}
+            View logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
