@@ -50,11 +50,16 @@ public class InventoryPage extends BasePage {
 
     public void removeFromCart(String productName) {
         String formattedName = productName.toLowerCase().replace(" ", "-");
+        By addButton = By.id("add-to-cart-" + formattedName);
         click(By.id("remove-" + formattedName));
+        // Wait for "Add to Cart" to reappear — confirms DOM has updated before getCartItemCount() is called
+        wait.until(ExpectedConditions.visibilityOfElementLocated(addButton));
     }
 
     public CartPage goToCart() {
-        click(cartLink);
+        // JS click bypasses headless CI intercept issues on the cart icon link
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(cartLink));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
         wait.until(ExpectedConditions.urlContains("cart.html"));
         return new CartPage(driver);
     }

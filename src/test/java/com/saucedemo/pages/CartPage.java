@@ -1,7 +1,10 @@
 package com.saucedemo.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class CartPage extends BasePage {
 
@@ -27,6 +30,8 @@ public class CartPage extends BasePage {
     }
 
     public void clickCheckout() {
-        click(checkoutButton);
+        // JS click — standard click can be silently intercepted in headless CI
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(checkoutButton));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
     }
 }
