@@ -1,3 +1,8 @@
+> **This repository has been archived.**
+> Development continues in [SDETBMan/qa-automation-portfolio](https://github.com/SDETBMan/qa-automation-portfolio/tree/main/cucumber).
+
+---
+
 # Enterprise Scalable BDD Test Automation Framework
 
 ![Java](https://img.shields.io/badge/Language-Java-orange)
