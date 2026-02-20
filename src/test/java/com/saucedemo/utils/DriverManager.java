@@ -21,9 +21,7 @@ public class DriverManager {
     }
 
     private static void initializeDriver() {
-        // 1. Check if we want to run locally or on BrowserStack
-        // Default to "local" if no property is provided
-        String target = System.getProperty("target", "local").toLowerCase();
+        String target = ConfigReader.getProperty("target", System.getProperty("target", "local")).toLowerCase();
 
         if (target.equals("browserstack")) {
             initBrowserStack();
@@ -35,30 +33,37 @@ public class DriverManager {
     private static void initLocalDriver() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
-        // options.addArguments("--headless=new"); // Uncomment if you want headless locally
+
+        boolean headless = Boolean.parseBoolean(ConfigReader.getProperty("headless", "false"))
+                || Boolean.parseBoolean(System.getProperty("headless", "false"))
+                || System.getenv("CI") != null;
+
+        if (headless) {
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+        }
+
         driver.set(new ChromeDriver(options));
-        System.out.println("--- Started Local Chrome Driver ---");
+        System.out.println("--- Started Local Chrome Driver (headless=" + headless + ") ---");
     }
 
     private static void initBrowserStack() {
-        // 1. Get credentials from System Properties (passed via Maven command line)
-        String username = System.getProperty("bsUser");
-        String accessKey = System.getProperty("bsKey");
+        String username = ConfigReader.getProperty("bs_user");
+        String accessKey = ConfigReader.getProperty("bs_key");
 
-        if (username == null || accessKey == null) {
-            throw new RuntimeException("BrowserStack credentials not found! Pass -DbsUser=... and -DbsKey=...");
+        if (username == null || username.isEmpty() || accessKey == null || accessKey.isEmpty()) {
+            throw new RuntimeException("BrowserStack credentials not found! Set BS_USER and BS_KEY secrets or pass -Dbs_user=... -Dbs_key=...");
         }
 
-        // 2. Configure BrowserStack Options
         ChromeOptions options = new ChromeOptions();
         HashMap<String, Object> bstackOptions = new HashMap<>();
         bstackOptions.put("os", "Windows");
         bstackOptions.put("osVersion", "11");
-        bstackOptions.put("sessionName", "Cucumber Framework Build");
+        bstackOptions.put("sessionName", "CucumberFramework Build");
         options.setCapability("bstack:options", bstackOptions);
 
         try {
-            // 3. Connect to the Cloud Grid
             String url = "https://" + username + ":" + accessKey + "@hub-cloud.browserstack.com/wd/hub";
             driver.set(new RemoteWebDriver(new URL(url), options));
             System.out.println("--- Started BrowserStack Remote Driver ---");

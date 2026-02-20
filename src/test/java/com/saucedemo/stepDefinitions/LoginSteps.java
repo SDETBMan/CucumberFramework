@@ -2,6 +2,7 @@ package com.saucedemo.stepDefinitions;
 
 import com.saucedemo.pages.LoginPage;
 import com.saucedemo.pages.ProductsPage;
+import com.saucedemo.utils.ConfigReader;
 import com.saucedemo.utils.DriverManager;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -16,7 +17,7 @@ public class LoginSteps {
     @Given("I am on the SauceDemo login page")
     public void i_am_on_the_login_page() {
         // 1. Navigate to the website
-        DriverManager.getDriver().get("https://www.saucedemo.com/");
+        DriverManager.getDriver().get(ConfigReader.getProperty("url", "https://www.saucedemo.com/"));
 
         // 2. Verify we are actually there
         Assert.assertTrue(DriverManager.getDriver().getCurrentUrl().contains("saucedemo"),

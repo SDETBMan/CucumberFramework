@@ -1,10 +1,10 @@
-# 🥒 Enterprise Scalable Test Automation Framework
+# Enterprise Scalable Test Automation Framework
 
 A robust, thread-safe BDD testing framework built from scratch to demonstrate modern SDET architecture. Designed for high scalability, this framework leverages **Java**, **Selenium 4**, and **Cucumber** with **TestNG** for parallel execution.
 
 ![CI/CD Status](https://github.com/SDETBMan/cucumber-framework-portfolio/actions/workflows/maven.yml/badge.svg)
 
-## 🚀 Key Features
+## Key Features
 
 * **Hybrid BDD Architecture:** Clear separation of concerns using Feature files, Step Definitions, and Page Object Model (POM).
 * **Parallel Execution:** Implemented `ThreadLocal<WebDriver>` to ensure thread safety, allowing multiple tests to run simultaneously (10x execution speedup).
@@ -12,7 +12,7 @@ A robust, thread-safe BDD testing framework built from scratch to demonstrate mo
 * **CI/CD Integration:** Fully automated pipeline via **GitHub Actions** running tests in Headless Chrome on Ubuntu containers.
 * **Singleton Design Pattern:** Efficient `DriverManager` to handle browser instances and prevent resource leaks.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 * **Language:** Java 11
 * **Core Library:** Selenium WebDriver 4
@@ -21,7 +21,7 @@ A robust, thread-safe BDD testing framework built from scratch to demonstrate mo
 * **Build Tool:** Maven
 * **CI/CD:** GitHub Actions
 
-## 📊 Reporting
+## Reporting
 
 The framework generates a "Manager-Friendly" interactive dashboard at:
 `target/spark-reports/Spark.html`
@@ -31,7 +31,7 @@ It provides:
 * Step-by-step logs for every scenario.
 * Timestamps and performance metrics.
 
-## ⚡ How to Run
+## How to Run
 
 ### Local Execution (GUI Mode)
 To run the tests on your local machine and see the browser:
@@ -42,7 +42,7 @@ mvn clean test
 CI/CD / Headless Mode
 The framework automatically detects if it's running in a CI environment (like Jenkins or GitHub Actions) and switches to Headless Chrome to run without a GUI.
 
-📂 Project Structure
+Project Structure
 ```
 src/test/java
 ├── com.saucedemo.pages           # Page Object Classes (Locators & Methods)

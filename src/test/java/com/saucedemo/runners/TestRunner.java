@@ -10,7 +10,8 @@ import org.testng.annotations.DataProvider; // <--- Import this!
         plugin = {
                 "pretty",
                 "html:target/cucumber-reports/cucumber.html",
-                "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
+                "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         monochrome = true
 )
