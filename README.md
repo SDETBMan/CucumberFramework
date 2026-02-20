@@ -1,8 +1,13 @@
 # Enterprise Scalable BDD Test Automation Framework
 
+![Java](https://img.shields.io/badge/Language-Java-orange)
+![Cucumber](https://img.shields.io/badge/BDD-Cucumber-brightgreen)
+![JaCoCo](https://img.shields.io/badge/Coverage-JaCoCo-blue)
+![Mockito](https://img.shields.io/badge/Mocks-Mockito-yellow)
+
 A production-grade, thread-safe BDD testing framework built from scratch to demonstrate modern SDET architecture. Designed for high scalability, this framework leverages **Java**, **Selenium 4**, and **Cucumber 7** with **TestNG** for parallel execution across web, mobile, and cloud platforms.
 
-![CI/CD Status](https://github.com/SDETBMan/CucumberFramework/actions/workflows/maven.yml/badge.svg)
+[![CI/CD Pipeline](https://github.com/SDETBMan/CucumberFramework/actions/workflows/maven.yml/badge.svg)](https://github.com/SDETBMan/CucumberFramework/actions/workflows/maven.yml)
 
 ## Key Features
 
