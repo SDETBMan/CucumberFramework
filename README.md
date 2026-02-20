@@ -2,7 +2,7 @@
 
 A robust, thread-safe BDD testing framework built from scratch to demonstrate modern SDET architecture. Designed for high scalability, this framework leverages **Java**, **Selenium 4**, and **Cucumber** with **TestNG** for parallel execution.
 
-![CI/CD Status](https://github.com/SDETBMan/cucumber-framework-portfolio/actions/workflows/maven.yml/badge.svg)
+![CI/CD Status](https://github.com/SDETBMan/CucumberFramework/actions/workflows/maven.yml/badge.svg)
 
 ## Key Features
 
